@@ -6,9 +6,13 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 
 import Header from './components/layout/Header';
 import Navegacion from './components/layout/Navegacion';
+
 import Clientes from './components/clientes/Clientes';
+import NuevloCliente from './components/clientes/NuevoCliente';
 import Pedidos from './components/pedidos/Pedidos';
 import Productos from './components/productos/Productos';
+
+
 
 
 
@@ -24,6 +28,7 @@ function App(){
          
           <Switch>
             <Route exact path="/" component={Clientes} />
+            <Route exact path="/clientes/nuevo" component={NuevloCliente} />
 
             <Route exact path="/productos" component={Productos} />
 

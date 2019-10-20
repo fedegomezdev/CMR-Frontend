@@ -1,4 +1,5 @@
 import React,{useState, useEffect, Fragment} from 'react';
+import {Link} from 'react-router-dom';
 
 import clienteAxios from '../../config/axios';
 
@@ -25,6 +26,11 @@ function Clientes(){
     return(
         <Fragment>
             <h2>Clientes</h2>
+
+            <Link to={"/clientes/nuevo"} className="btn btn-verde nvo-cliente"> 
+                <i className="fas fa-plus-circle"></i>
+                Nuevo Cliente
+            </Link>
 
             <ul className="listado-clientes">
                 {clientes.map(cliente => { {/* podria no poner el corchete  y return y poner directo "(""  */ }
