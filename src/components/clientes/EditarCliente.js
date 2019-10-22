@@ -3,7 +3,10 @@ import clienteAxios from '../../config/axios';
 import Swal from 'sweetalert2';
 import {withRouter} from 'react-router-dom';
 
-function NuevoCliente({history}){ //nos va a permitir redireccionar (props.history)
+function EditarCliente(props){ 
+    //obtengo el id
+    const {id} = props.match.params;
+    console.log(id);
 
 
     const [cliente, guardarCliente] = useState({
@@ -34,34 +37,6 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
         return valido;
     }
 
-    //agregar cliente
-    const agregarCliente = e => {
-        e.preventDefault();
-
-        //enviar peticion
-        clienteAxios.post('/clientes', cliente)
-            .then(res => {
-                if(res.data.code === 11000){ //data.code existe si hay algun error, en este caso el 11000 es un error de mongo
-                    console.log('Error de duplicado de mongo')
-                    Swal.fire({
-                        type:'error',
-                        title:'Hubo un error',
-                        text:'Cliente ya registrado'
-                    })
-                }else {
-                    console.log(res.data);
-                    Swal.fire(
-                        'Se agregó un cliente',
-                        res.data.mensaje, //traigo del back
-                        'success'
-                      )
-                }
-                //redireccion
-                history.push('/');
-
-            })
-
-    }
 
 
     return(
@@ -69,7 +44,7 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
 
         <h2>Nuevo Cliente</h2>
 
-        <form onSubmit={agregarCliente} > 
+        <form> 
                 <legend>Llena todos los campos</legend>
 
                 <div className="campo">
@@ -132,4 +107,4 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
     )
 }
 //HOC, toma un componente y retorna uno nuevo
-export default withRouter(NuevoCliente);
+export default withRouter(EditarCliente);
