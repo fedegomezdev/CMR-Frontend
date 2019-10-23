@@ -21,7 +21,7 @@ function Clientes(){
     useEffect( () =>{
 
         consultarApi();
-    }, [] );
+    }, [clientes] ); //cuando clientes cambie que haga consultarapi, para cuando eliminamos en el componente cliente, se actualize la vista sin el cliente eliminado, porq no podemos usar props.history al mismo componente
 
     return(
         <Fragment>
