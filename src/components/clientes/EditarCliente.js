@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import clienteAxios from '../../config/axios';
 import Swal from 'sweetalert2';
 import {withRouter} from 'react-router-dom';
@@ -9,7 +9,7 @@ function EditarCliente(props){
     console.log(id);
 
 
-    const [cliente, guardarCliente] = useState({
+    const [cliente, datosCliente] = useState({
         nombre:'',
         apellido:'',
         email:'',
@@ -17,15 +17,63 @@ function EditarCliente(props){
         empresa:''
     });
 
+
+    //Query a la api
+    const consultarApi = async () => {
+        const clienteConsulta = await clienteAxios.get(`/clientes/${id}`);
+
+        //colocar en el state
+        datosCliente(clienteConsulta.data);
+    }  
+
+
+    //cuando el componente carga
+    useEffect( ()=> {
+        consultarApi();
+    }, []);
+
+
+
     //leer los datos del formulario
     const actualizarState = e =>  {
         //almacenar lo q el usuario escribe en el state
-        guardarCliente({
+        datosCliente({
             //obtener una copia del state actual para que cuando escribamos algo, no se borren los valores previos
             ...cliente,
             [e.target.name]:e.target.value
         })
     }
+
+    //peticion por axios para actualizar
+    const actualizarCliente = (e) => {
+        e.preventDefault();
+
+        //enviar peticios
+        clienteAxios.put(`/clientes/${cliente._id}`, cliente)
+        .then(res => {
+            if(res.data.code === 11000){ //data.code existe si hay algun error, en este caso el 11000 es un error de mongo
+                console.log('Error de duplicado de mongo')
+                Swal.fire({
+                    type:'error',
+                    title:'Hubo un error',
+                    text:'Cliente ya registrado'
+                })
+            }else {
+                console.log(res.data);
+                Swal.fire(
+                    'Se actualizo correctamente',
+                    'Cliente Actualizado',
+                    'success'
+                  )
+            }
+            //redireccion
+            props.history.push('/');
+
+        })
+
+    }
+
+
 
     //validar formulario
     const validarCliente = () => {
@@ -42,9 +90,9 @@ function EditarCliente(props){
     return(
         <Fragment>
 
-        <h2>Nuevo Cliente</h2>
+        <h2>Editar Cliente</h2>
 
-        <form> 
+        <form onSubmit={actualizarCliente}> 
                 <legend>Llena todos los campos</legend>
 
                 <div className="campo">
@@ -53,6 +101,7 @@ function EditarCliente(props){
                     placeholder="Nombre Cliente" 
                     name="nombre"
                     onChange={actualizarState}
+                    value={cliente.nombre}
                     />
                 </div>
 
@@ -62,6 +111,7 @@ function EditarCliente(props){
                     placeholder="Apellido Cliente" 
                     name="apellido"
                     onChange={actualizarState}
+                    value={cliente.apellido}
                     />
                 </div>
             
@@ -71,6 +121,7 @@ function EditarCliente(props){
                     placeholder="Empresa Cliente" 
                     name="empresa"
                     onChange={actualizarState}
+                    value={cliente.empresa}
                     />
                 </div>
 
@@ -80,6 +131,7 @@ function EditarCliente(props){
                     placeholder="Email Cliente" 
                     name="email"
                     onChange={actualizarState}
+                    value={cliente.email}
                     />
                 </div>
 
@@ -89,13 +141,14 @@ function EditarCliente(props){
                     placeholder="Teléfono Cliente"
                     name="telefono"
                     onChange={actualizarState}
+                    value={cliente.telefono}
                     />
                 </div>
 
                 <div className="enviar">
                         <input type="submit" 
                         className="btn btn-azul" 
-                        value="Agregar Cliente"
+                        value="Guardar Cambios"
                         disabled={validarCliente()}   
                         /> {/* se ejecuta directamente si uso (), sino espera algun cmabio o algo */}
                 </div>
