@@ -2,6 +2,7 @@ import React,{Fragment, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './Producto';
+import Spinner from '../layout/Spinner.js';
 
 
 function Productos(){
@@ -19,6 +20,9 @@ function Productos(){
     useEffect(()=> {
         consultarApi();
     }, [productos]); //para que se reinicie la pantalla cuando cambia algo en productos, ejemplo eliminar en el componente producto
+
+    //spinner de carga
+    if (!productos.length) return <Spinner/>
 
 
     return(
