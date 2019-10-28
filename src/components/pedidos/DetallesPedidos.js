@@ -26,7 +26,7 @@ function DetallePedidos({pedido}){
                         </div>
                         <p className="total">Total: ${pedido.total} </p>
                     </div>
-                    <div className="acciones">
+                   {/* <div className="acciones">
                         <a href="#" className="btn btn-azul">
                             <i className="fas fa-pen-alt"></i>
                             Editar Pedido
@@ -36,7 +36,7 @@ function DetallePedidos({pedido}){
                             <i className="fas fa-times"></i>
                             Eliminar Pedido
                         </button>
-                    </div>
+                                </div>  */}
                 </li>
     )
 }
