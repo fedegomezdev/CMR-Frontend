@@ -1,10 +1,14 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 import {withRouter} from 'react-router-dom';
 
+import {CRMContext} from '../../context/CRMContext';
+
 function Login(props) {
 
+    //auth y token
+    const [ auth , guardarAuth ] = useContext(CRMContext);
     //state con los datos del form  
     const [ credenciales, guardarCredenciales] = useState({});
 
@@ -24,11 +28,16 @@ function Login(props) {
         //autenticar usuario
         try {
             const respuesta= await clienteAxios.post('/iniciar-sesion', credenciales);
-            console.log(respuesta);
 
             //extraer token y colocarlo en localstorage
             const {token} = respuesta.data;
             localStorage.setItem('token', token);
+
+            //guardar token
+            guardarAuth({
+                token,
+                auth: true
+            })
 
             //alerta
             Swal.fire({
