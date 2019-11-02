@@ -1,29 +1,56 @@
-import React,{Fragment, useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React,{Fragment, useState, useEffect, useContext} from 'react';
+import {Link, withRouter} from 'react-router-dom';
 import clienteAxios from '../../config/axios';
 import Producto from './Producto';
 import Spinner from '../layout/Spinner.js';
 
+import {CRMContext} from '../../context/CRMContext';
 
-function Productos(){
+function Productos(props){
 
 
     const [productos, guardarProductos] = useState([]);
 
+    const [auth, guardarAuth] = useContext(CRMContext);
+
     const consultarApi = async () =>{
-        const resultado = await clienteAxios.get('/productos');
+        const resultado = await clienteAxios.get('/productos', {
+            headers: {
+                Authorization : `Bearer ${auth.token}`
+            }
+        });
         guardarProductos(resultado.data);
     }
 
 
     //consulto api cuando cargue
     useEffect(()=> {
-        consultarApi();
+        
+        if(auth.token !== '') {
+            try {
+            consultarApi();
+        } catch (error) {
+             // Error con authorizacion
+             if(error.response.status = 500) {
+                props.history.push('/iniciar-sesion');
+            }
+        }
+       
+        } else {
+            props.history.push('/iniciar-sesion')
+        }
     }, [productos]); //para que se reinicie la pantalla cuando cambia algo en productos, ejemplo eliminar en el componente producto
+
+
+    if(!auth.auth){
+        props.history.push('/iniciar-sesion');
+    }
 
     //spinner de carga
     if (!productos.length) return <Spinner/>
 
+   
+  
 
     return(
         <Fragment>
@@ -46,4 +73,4 @@ function Productos(){
     )
 }
 
-export default Productos;
+export default withRouter(Productos);

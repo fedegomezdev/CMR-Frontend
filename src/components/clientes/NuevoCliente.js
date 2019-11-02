@@ -1,9 +1,13 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useContext} from 'react'
 import clienteAxios from '../../config/axios';
 import Swal from 'sweetalert2';
 import {withRouter} from 'react-router-dom';
 
+import {CRMContext} from '../../context/CRMContext';
+
 function NuevoCliente({history}){ //nos va a permitir redireccionar (props.history)
+
+    const [auth, guardarAuth] = useContext(CRMContext);
 
 
     const [cliente, guardarCliente] = useState({
@@ -63,6 +67,8 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
 
     }
 
+    //verificar si esta autenticado
+    if(!auth.auth) {history.push('/inciar-sesion')};
 
     return(
         <Fragment>
