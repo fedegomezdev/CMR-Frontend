@@ -6,9 +6,11 @@ import { CRMContext } from "../../context/CRMContext";
 
 
 function Pedidos(props) {
-  const [pedidos, guardarPedidos] = useState([]);
 
   const [auth, guardarAuth] = useContext(CRMContext);
+
+  const [pedidos, guardarPedidos] = useState([]);
+
 
 
   useEffect(() => {
@@ -22,6 +24,7 @@ function Pedidos(props) {
             });
           guardarPedidos(resultado.data);
         } catch(error){
+          
             if(error.response.status = 500){
               props.history.push('/iniciar-sesion')
             }

@@ -45,7 +45,8 @@ function NuevoProducto(props){
         try {
             const res = await clienteAxios.post('/productos' , formData, {
                 headers: {
-                    'Content-Type':'multipart/form-data'
+                    'Content-Type':'multipart/form-data',
+                    Authorization : `Bearer ${auth.token}`
                 }
             });
 

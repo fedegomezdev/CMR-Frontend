@@ -21,18 +21,35 @@ function EditarCliente(props){
     });
 
 
-    //Query a la api
-    const consultarApi = async () => {
-        const clienteConsulta = await clienteAxios.get(`/clientes/${id}`);
-
-        //colocar en el state
-        datosCliente(clienteConsulta.data);
-    }  
-
+    
 
     //cuando el componente carga
     useEffect( ()=> {
-        consultarApi();
+
+        if(auth.token !== ''){
+            const consultarApi = async () => {
+                try{
+
+                const clienteConsulta = await clienteAxios.get(`/clientes/${id}`, {
+                    headers : {
+                        Authorization : `Bearer ${auth.token}`
+                    }
+                });
+        
+                //colocar en el state
+                datosCliente(clienteConsulta.data);
+            } catch(error){
+                if(error.response.status = 500) {
+                    props.history.push('/iniciar-sesion');
+                }
+            }
+         } 
+         consultarApi();
+        }else{
+            props.history.push('/iniciar-sesion')
+        }
+    
+
     }, []);
 
 
@@ -52,7 +69,7 @@ function EditarCliente(props){
         e.preventDefault();
 
         //enviar peticios
-        clienteAxios.put(`/clientes/${cliente._id}`, cliente)
+        clienteAxios.put(`/clientes/${cliente._id}`,cliente ,{headers : {Authorization : `Bearer ${auth.token}`}} )
         .then(res => {
             if(res.data.code === 11000){ //data.code existe si hay algun error, en este caso el 11000 es un error de mongo
                 console.log('Error de duplicado de mongo')

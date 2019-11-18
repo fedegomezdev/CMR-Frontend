@@ -66,7 +66,8 @@ function EditarProducto(props){
         try {
             const res = await clienteAxios.put(`/productos/${id}` , formData, {
                 headers: {
-                    'Content-Type':'multipart/form-data'
+                    'Content-Type':'multipart/form-data',
+                    Authorization : `Bearer ${auth.token}`
                 }
             });
 

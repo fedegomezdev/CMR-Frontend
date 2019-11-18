@@ -43,7 +43,7 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
         e.preventDefault();
 
         //enviar peticion
-        clienteAxios.post('/clientes', cliente)
+        clienteAxios.post('/clientes', cliente ,{headers : {Authorization : `Bearer ${auth.token}`}})
             .then(res => {
                 if(res.data.code === 11000){ //data.code existe si hay algun error, en este caso el 11000 es un error de mongo
                     console.log('Error de duplicado de mongo')

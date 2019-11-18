@@ -1,12 +1,16 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useContext} from 'react';
 import {Link} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
+import {CRMContext} from '../../context/CRMContext';
 
 
 function Producto({producto}){
 
     const {_id, nombre, precio, imagen} = producto;
+
+    const [auth, guardarAuth] = useContext(CRMContext);
+
 
     const eliminarProducto = id => {
         Swal.fire({
@@ -21,7 +25,7 @@ function Producto({producto}){
         }).then((result) => {
             if (result.value) {
               // eliminar en la rest api
-              clienteAxios.delete(`/productos/${id}`)
+              clienteAxios.delete(`/productos/${id}`,{headers : {Authorization : `Bearer ${auth.token}`}})
                 .then(res => {
                     if(res.status === 200) {
                         Swal.fire(

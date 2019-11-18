@@ -51,7 +51,7 @@ function NuevoPedido(props){
     const buscarProducto = async (e) => {
         e.preventDefault();
         //obtenerproductos
-        const resultadoBusqueda = await clienteAxios.post(`/productos/busqueda/${busqueda}`)
+        const resultadoBusqueda = await clienteAxios.post(`/productos/busqueda/${busqueda}`,{headers : {Authorization : `Bearer ${auth.token}`}})
 
 
         if(resultadoBusqueda.data[0]){
@@ -137,7 +137,7 @@ function NuevoPedido(props){
             "pedido": productos,
             "total": total 
         }
-        const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido);
+        const resultado = await clienteAxios.post(`/pedidos/nuevo/${id}`, pedido,{headers : {Authorization : `Bearer ${auth.token}`}});
 
         if(resultado.status === 200){
             Swal.fire({
