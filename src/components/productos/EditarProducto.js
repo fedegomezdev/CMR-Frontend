@@ -1,8 +1,9 @@
-import React,{useState, useEffect, Fragment} from 'react';
+import React,{useState, useEffect, Fragment, useContext} from 'react';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 import {withRouter} from 'react-router-dom';
 import Spinner from '../layout/Spinner.js';
+import {CRMContext} from '../../context/CRMContext';
 
 
 
@@ -12,6 +13,9 @@ function EditarProducto(props){
     //obtener id
     const {id} = props.match.params;
 
+    const [auth, guardarAuth] = useContext(CRMContext);
+
+
     const [producto, guardarProducto] = useState({
         nombre:'',
         precio:'',
@@ -20,15 +24,31 @@ function EditarProducto(props){
 
     const [archivo, guardarArchivo] = useState('');
 
-    //consultar a la api
-    const consultarApi = async()=>{
-        const productoConsulta = await clienteAxios.get(`/productos/${id}`);
-        console.log(productoConsulta.data);
-        guardarProducto(productoConsulta.data);
-    }
+    
 
     useEffect(()=> {
+        if(auth.token !== ''){
+            //consultar a la api
+        const consultarApi = async()=>{
+            try{
+            const productoConsulta = await clienteAxios.get(`/productos/${id}` , {
+                headers: {
+                  Authorization : `Bearer ${auth.token}`
+                }
+            });
+            console.log(productoConsulta.data);
+            guardarProducto(productoConsulta.data);
+        } catch(error){
+            if(error.response.status = 500) {
+                props.history.push('/iniciar-sesion');
+        }
+        }
+        }
         consultarApi();
+        } else {
+            props.history.push('/iniciar-sesion')
+        }
+        
     }, [] );
 
     //editar producto en la db
@@ -91,6 +111,9 @@ function EditarProducto(props){
     const {nombre, precio, imagen} = producto;
 
     if (!nombre) return <Spinner/>
+
+    if(!auth.auth && (localStorage.getItem('token') === auth.token)) {props.history.push('/inciar-sesion')};
+
 
     return(
     

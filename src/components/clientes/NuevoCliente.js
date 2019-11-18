@@ -68,7 +68,7 @@ function NuevoCliente({history}){ //nos va a permitir redireccionar (props.histo
     }
 
     //verificar si esta autenticado
-    if(!auth.auth) {history.push('/inciar-sesion')};
+    if(!auth.auth && (localStorage.getItem('token') === auth.token)) {history.push('/inciar-sesion')};
 
     return(
         <Fragment>

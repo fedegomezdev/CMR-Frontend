@@ -1,10 +1,12 @@
-import React,{Fragment, useState} from 'react';
+import React,{Fragment, useState, useContext} from 'react';
 import Swal from 'sweetalert2';
 import clienteAxios from '../../config/axios';
 import {withRouter} from 'react-router-dom';
+import {CRMContext} from '../../context/CRMContext';
 
 function NuevoProducto(props){
 
+    const [auth, guardarAuth] = useContext(CRMContext);
 
     const [producto, guardarProducto] = useState({
         nombre:'',
@@ -69,6 +71,8 @@ function NuevoProducto(props){
         }
 
     }
+
+    if(!auth.auth && (localStorage.getItem('token') === auth.token)) {props.history.push('/inciar-sesion')};
 
 
     return(

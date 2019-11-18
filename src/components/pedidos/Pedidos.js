@@ -1,18 +1,43 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import clienteAxios from "../../config/axios";
 import DetallePedidos from './DetallesPedidos';
+import {withRouter} from 'react-router-dom';
+import { CRMContext } from "../../context/CRMContext";
 
-function Pedidos() {
+
+function Pedidos(props) {
   const [pedidos, guardarPedidos] = useState([]);
 
+  const [auth, guardarAuth] = useContext(CRMContext);
+
+
   useEffect(() => {
-    const consultarApi = async () => {
-      const resultado = await clienteAxios.get("/pedidos");
-      guardarPedidos(resultado.data);
+    if(auth.token !== '') {
+      const consultarApi = async () => {
+        try{
+            const resultado = await clienteAxios.get("/pedidos",{
+              headers: {
+                Authorization : `Bearer ${auth.token}`
+              }
+            });
+          guardarPedidos(resultado.data);
+        } catch(error){
+            if(error.response.status = 500){
+              props.history.push('/iniciar-sesion')
+            }
+        }
     };
 
     consultarApi();
+  } else {
+    props.history.push('/iniciar-sesion')
+  }
   });
+
+  
+  if(!auth.auth){
+    props.history.push('/iniciar-sesion');
+  }
 
   return (
     <Fragment>
@@ -29,4 +54,4 @@ function Pedidos() {
   );
 }
 
-export default Pedidos;
+export default withRouter(Pedidos);

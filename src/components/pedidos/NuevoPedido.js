@@ -1,9 +1,11 @@
-import React,{Fragment, useState , useEffect} from 'react';
+import React,{Fragment, useState , useEffect, useContext} from 'react';
 import clienteAxios from '../../config/axios';
 import FormBuscarProducto from './FormBuscarProducto';
 import Swal from 'sweetalert2';
 import FormCantidadProducto from './FormCantidadProducto';
 import {withRouter} from 'react-router-dom';
+import {CRMContext} from '../../context/CRMContext';
+
 
 function NuevoPedido(props){
 
@@ -11,20 +13,35 @@ function NuevoPedido(props){
     //extraer id
     const {id} = props.match.params;
 
+    const [auth, guardarAuth] = useContext(CRMContext);
+
     const [cliente, guardarCliente] = useState({});
     const [busqueda, guardarBusqueda]= useState('');
     const [productos, guardarProductos] = useState([]);
     const [total, guardarTotal] = useState(0);
 
 
-    const consultarApi = async () =>{
-        const resultado = await clienteAxios.get(`clientes/${id}`);
-        guardarCliente(resultado.data);
-    }
-
+    
     useEffect(()=> {
-        
-        consultarApi();
+        if(auth.token !== ''){
+            const consultarApi = async () =>{
+                try{ 
+                    const resultado = await clienteAxios.get(`clientes/${id}`, {
+                        headers : {
+                            Authorization : `Bearer ${auth.token}`
+                        }
+                    });
+                    guardarCliente(resultado.data);
+                }catch(error){
+                    if(error.response.status = 500) {
+                        props.history.push('/iniciar-sesion');
+                }
+                }
+            }
+            consultarApi();
+        }else {
+            props.history.push('/iniciar-sesion')
+        }
         //actualizar total
         actualizarTotal();
 
@@ -139,6 +156,9 @@ function NuevoPedido(props){
         //redireccionar
         props.history.push('/pedidos');
     } 
+
+    if(!auth.auth && (localStorage.getItem('token') === auth.token)) {props.history.push('/inciar-sesion')};
+
 
     return(
         <Fragment>

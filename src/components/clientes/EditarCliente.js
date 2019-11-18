@@ -1,13 +1,16 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, {Fragment, useState, useEffect, useContext} from 'react'
 import clienteAxios from '../../config/axios';
 import Swal from 'sweetalert2';
 import {withRouter} from 'react-router-dom';
+import {CRMContext} from '../../context/CRMContext';
+
 
 function EditarCliente(props){ 
     //obtengo el id
     const {id} = props.match.params;
     console.log(id);
 
+    const [auth, guardarAuth] = useContext(CRMContext);
 
     const [cliente, datosCliente] = useState({
         nombre:'',
@@ -85,6 +88,8 @@ function EditarCliente(props){
         return valido;
     }
 
+
+    if(!auth.auth && (localStorage.getItem('token') === auth.token)) {props.history.push('/inciar-sesion')};
 
 
     return(

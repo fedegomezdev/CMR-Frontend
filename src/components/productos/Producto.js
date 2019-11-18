@@ -56,7 +56,7 @@ function Producto({producto}){
                          onClick={()=> eliminarProducto(_id)}
                          >
                             <i className="fas fa-times"></i>
-                            Eliminar Cliente
+                            Eliminar Producto
                         </button>
                     </div>
                 </li>

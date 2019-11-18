@@ -25,7 +25,7 @@ function Header(props){
                  <h1>CRM - Administrador de Clientes</h1>
 
                 {auth.auth ? (<button type="button" onClick={cerrarSesion} className='btn btn-rojo'> 
-                 <i className="far fa-times-circle"> Cerrar Sesión</i> </button>) : null}    
+                 <i> Cerrar Sesión</i> </button>) : null}    
                  
 
                 </div> 
