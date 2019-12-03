@@ -47,7 +47,7 @@ function Producto({producto}){
                     <div className="info-producto">
                         <p className="nombre">{nombre}</p>
                         <p className="precio">{precio}</p>
-                        { imagen ? ( <img src={`http://localhost:4000/${imagen}`} alt="imagen"/>) : null  }
+                        { imagen ? ( <img src={`http://localhost:4000/${imagen}`} width="300" height="400" alt="imagen"/>) : null  }
                     </div>
                     <div className="acciones"> 
                         <Link to={`/productos/editar/${_id}`} className="btn btn-azul">

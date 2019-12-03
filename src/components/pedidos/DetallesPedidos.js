@@ -1,4 +1,5 @@
 import React from 'react';
+import Pedidos from './Pedidos';
 
 function DetallePedidos({pedido}){
 
@@ -8,7 +9,7 @@ function DetallePedidos({pedido}){
     return(
         <li className="pedido">
                     <div className="info-pedido">
-                        <p className="id">ID: 0192019201291201</p>
+                        <p className="id">{Pedidos._id} </p>
                         <p className="nombre">Cliente: {cliente.nombre} {cliente.apellido}</p>
     
                         <div className="articulos-pedido">
@@ -16,7 +17,7 @@ function DetallePedidos({pedido}){
                             <ul>
                                 {pedido.pedido.map(articulos => (
                                     <li key={pedido._id+articulos.producto._id}>
-                                        <p>{articulos.producto.nombre}</p>
+                                        <p>Producto: {articulos.producto.nombre}</p>
                                         <p>Precio: ${articulos.producto.precio}</p>
                                         <p>Cantidad: {articulos.cantidad}</p>
 

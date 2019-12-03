@@ -47,13 +47,9 @@ function Productos(props){
     }
 
     //spinner de carga
-    if (!productos.length) return <Spinner/>
-
-   
-  
-
-    return(
-        <Fragment>
+    if (!productos.length){ 
+        return( 
+            <Fragment>
             <main className="caja-contenido col-9">
             <h2>Productos</h2>
 
@@ -61,16 +57,32 @@ function Productos(props){
                  <i className="fas fa-plus-circle"></i>
                 Nuevo Producto
             </Link>
+            <Spinner/> 
+            </main>
+            </Fragment>
+        )} else{ 
+            return(
+                <Fragment>
+                    <main className="caja-contenido col-9">
+                    <h2>Productos</h2>
+        
+                    <Link to={'/productos/nuevo'} className="btn btn-verde nvo-cliente">
+                         <i className="fas fa-plus-circle"></i>
+                        Nuevo Producto
+                    </Link>
+        
+                    <ul className="listado-productos">
+                        {productos.map(product => (
+                            <Producto producto={product} key={product._id}/>
+                        ))}
+                    </ul>
+                </main>
+                </Fragment>
+           
+            )
+         }
 
-            <ul className="listado-productos">
-                {productos.map(product => (
-                    <Producto producto={product} key={product._id}/>
-                ))}
-            </ul>
-        </main>
-        </Fragment>
-   
-    )
+    
 }
 
 export default withRouter(Productos);

@@ -54,10 +54,10 @@ function Clientes(props) {
   }
 
 
-  if (!clientes.length) return <Spinner />;
+  if (!clientes.length){
+    return(
 
-  return (
-    <Fragment>
+      <Fragment>
       <h2>Clientes</h2>
 
       <Link to={"/clientes/nuevo"} className="btn btn-verde nvo-cliente">
@@ -65,16 +65,33 @@ function Clientes(props) {
         Nuevo Cliente
       </Link>
 
-      <ul className="listado-clientes">
-        {clientes.map(cliente => {
-          {
-            /* podria no poner el corchete  y return y poner directo "(""  */
-          }
-          return <Cliente key={cliente._id} cliente={cliente} />;
-        })}
-      </ul>
-    </Fragment>
-  );
+
+      <Spinner />
+      </Fragment>
+    )
+  } else{ 
+    return (
+      <Fragment>
+        <h2>Clientes</h2>
+  
+        <Link to={"/clientes/nuevo"} className="btn btn-verde nvo-cliente">
+          <i className="fas fa-plus-circle"></i>
+          Nuevo Cliente
+        </Link>
+  
+        <ul className="listado-clientes">
+          {clientes.map(cliente => {
+            {
+              /* podria no poner el corchete  y return y poner directo "(""  */
+            }
+            return <Cliente key={cliente._id} cliente={cliente} />;
+          })}
+        </ul>
+      </Fragment>
+    );
+  }
+
+  
 }
 
 export default withRouter(Clientes);

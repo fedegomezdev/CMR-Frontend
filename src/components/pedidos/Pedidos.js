@@ -3,6 +3,9 @@ import clienteAxios from "../../config/axios";
 import DetallePedidos from './DetallesPedidos';
 import {withRouter} from 'react-router-dom';
 import { CRMContext } from "../../context/CRMContext";
+import Spinner from '../layout/Spinner.js';
+import Productos from "../productos/Productos";
+
 
 
 function Pedidos(props) {
@@ -42,6 +45,7 @@ function Pedidos(props) {
     props.history.push('/iniciar-sesion');
   }
 
+  if(!pedidos.length) return <Spinner/>
   return (
     <Fragment>
       <h2>Pedidos</h2>
